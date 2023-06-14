@@ -6,18 +6,18 @@ import edu.dio.bootcampTQI.credit.application.system.service.ICustomerService
 import org.springframework.stereotype.Service
 
 @Service
-class Customer(
+class CustomerService(
     private val customerRepository: CustomerRepository
 ): ICustomerService {
     override fun save(customer: Customer): Customer{
         return customerRepository.save(customer)
     }
-    override fun findById(custumerId: Long): Customer{
-        return this.customerRepository.findById(custumerId).orElseThrow(){
-            throw RuntimeException("[LOG] ID: $custumerId not found!")
+    override fun findById(customerId: Long): Customer{
+        return this.customerRepository.findById(customerId).orElseThrow(){
+            throw RuntimeException("[LOG] ID: $customerId not found!")
         }
     }
-    override fun delete(custumerId: Long){
-        customerRepository.deleteById(custumerId)
+    override fun delete(customerId: Long){
+        customerRepository.deleteById(customerId)
     }
 }

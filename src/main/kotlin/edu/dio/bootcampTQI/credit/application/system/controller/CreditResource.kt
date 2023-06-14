@@ -12,6 +12,7 @@ import java.util.*
 import java.util.stream.Collectors
 
 @RestController
+@RequestMapping("/api/credit")
 class CreditResource(
     private val creditService: CreditService
 ){
@@ -23,7 +24,7 @@ class CreditResource(
 
     @GetMapping
     fun findAllByCustomerId(@RequestParam(value = "customerId")customerId: Long): ResponseEntity<List<CreditViewList>>{
-        val creditViewList: List<CreditViewList> = this.creditService.findAllByCustumerId(customerId).stream().map {
+        val creditViewList: List<CreditViewList> = this.creditService.findAllByCustomerId(customerId).stream().map {
             credit: Credit -> CreditViewList(credit)
         }.collect(Collectors.toList())
         return ResponseEntity.status(HttpStatus.OK).body(creditViewList)
@@ -31,7 +32,7 @@ class CreditResource(
 
     @GetMapping("/{creditCode}")
     fun findByCreditCode(@RequestParam(value="customerId") customerId: Long,
-                         @PathVariable creditCode: UUID) : ResponseEntity<CreditView> {
+                         @PathVariable("creditCode") creditCode: UUID) : ResponseEntity<CreditView> {
         val credit: Credit = this.creditService.findByCreditCode(customerId, creditCode)
         return ResponseEntity.status(HttpStatus.OK).body(CreditView(credit))
     }

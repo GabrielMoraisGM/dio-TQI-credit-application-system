@@ -9,21 +9,21 @@ import java.util.*
 @Service
 class CreditService(
     private val creditRepository: CreditRepository,
-    private val customerService: Customer
+    private val customerService: CustomerService
 ): ICreditService {
     override fun save(credit: Credit): Credit {
         credit.apply {
-            customer = customerService.findById(credit.customer?.idCustumer!!)
+            customer = customerService.findById(credit.customer?.idCustomer!!)
         }
         return this.creditRepository.save(credit)
     }
 
-    override fun findAllByCustumerId(custumerId: Long): List<Credit> = this.creditRepository.findAllByCustumerId(custumerId)
+    override fun findAllByCustomerId(customerId: Long): List<Credit> = this.creditRepository.findAllByCustomerId(customerId)
 
     override fun findByCreditCode(custumerId: Long ,creditCode: UUID): Credit {
         val credit: Credit = (this.creditRepository.findByCreditCode(creditCode)
             ?: throw RuntimeException("[LOG] CreditCode $creditCode not found"))
-        return if (credit.customer?.idCustumer == custumerId ) credit else throw RuntimeException("[ALERT]Contact admin")
+        return if (credit.customer?.idCustomer == custumerId ) credit else throw RuntimeException("[ALERT]Contact admin")
     }
 
 

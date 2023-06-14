@@ -20,7 +20,7 @@ data class Credit(
     @Enumerated
     val status: Status = Status.IN_PROGRESS,
     @ManyToOne
-    var customer: edu.dio.bootcampTQI.credit.application.system.model.Customer? = null,
+    var customer: Customer? = null,
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     val idCredit: Long? = null
 )
