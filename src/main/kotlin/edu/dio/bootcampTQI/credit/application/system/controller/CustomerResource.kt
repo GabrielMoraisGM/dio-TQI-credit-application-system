@@ -10,25 +10,25 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-//@RestMapping("/api/customer")
+@RequestMapping("/api/customer")
 class CustomerResource(
     private val customerService: ICustomerService
 ){
 
-    @PostMapping("{customerDto}")
+    @PostMapping()
     fun saveCustomer(@RequestBody customerDto: CustomerDto): ResponseEntity<String>{
         val savedCustomer = this.customerService.save(customerDto.toEntity())
         return ResponseEntity.status(HttpStatus.CREATED).body("Customer ${savedCustomer.email} saved!")
     }
 
     @GetMapping("/{id}")
-    fun findById(@PathVariable customerId: Long): ResponseEntity<CustomerView>{
+    fun findById(@PathVariable("id") customerId: Long): ResponseEntity<CustomerView>{
         val customer: Customer = this.customerService.findById(customerId)
     return ResponseEntity.status(HttpStatus.OK).body(CustomerView(customer))
     }
 
     @DeleteMapping("/{id}")
-    fun deleteCustomer(@PathVariable customerId: Long) = this.customerService.delete(customerId)
+    fun deleteCustomer(@PathVariable("id") customerId: Long) = this.customerService.delete(customerId)
 
     @PatchMapping
     fun updateCustomer(@RequestParam(value = "customerId")customerId: Long,
