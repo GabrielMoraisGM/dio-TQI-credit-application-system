@@ -1,5 +1,6 @@
 package edu.dio.bootcampTQI.credit.application.system.service.impl
 
+import edu.dio.bootcampTQI.credit.application.system.exception.BusinessException
 import edu.dio.bootcampTQI.credit.application.system.model.Customer
 import edu.dio.bootcampTQI.credit.application.system.repository.CustomerRepository
 import edu.dio.bootcampTQI.credit.application.system.service.ICustomerService
@@ -14,10 +15,11 @@ class CustomerService(
     }
     override fun findById(customerId: Long): Customer{
         return this.customerRepository.findById(customerId).orElseThrow(){
-            throw RuntimeException("[LOG] ID: $customerId not found!")
+            throw BusinessException("[LOG] ID: $customerId not found!")
         }
     }
     override fun delete(customerId: Long){
-        customerRepository.deleteById(customerId)
+        val customer: Customer = this.findById(customerId)
+        customerRepository.delete(customer)
     }
 }

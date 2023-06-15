@@ -5,6 +5,7 @@ import edu.dio.bootcampTQI.credit.application.system.dto.CustomerUpdateDto
 import edu.dio.bootcampTQI.credit.application.system.dto.CustomerView
 import edu.dio.bootcampTQI.credit.application.system.model.Customer
 import edu.dio.bootcampTQI.credit.application.system.service.ICustomerService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -16,9 +17,9 @@ class CustomerResource(
 ){
 
     @PostMapping()
-    fun saveCustomer(@RequestBody customerDto: CustomerDto): ResponseEntity<String>{
+    fun saveCustomer(@Valid @RequestBody customerDto: CustomerDto): ResponseEntity<CustomerView>{
         val savedCustomer = this.customerService.save(customerDto.toEntity())
-        return ResponseEntity.status(HttpStatus.CREATED).body("Customer ${savedCustomer.email} saved!")
+        return ResponseEntity.status(HttpStatus.CREATED).body(CustomerView(savedCustomer))
     }
 
     @GetMapping("/{id}")
@@ -32,7 +33,7 @@ class CustomerResource(
 
     @PatchMapping
     fun updateCustomer(@RequestParam(value = "customerId")customerId: Long,
-                       @RequestBody customerUpdateDto: CustomerUpdateDto
+                       @Valid @RequestBody customerUpdateDto: CustomerUpdateDto
     ): ResponseEntity<CustomerView>{
         val customer: Customer = this.customerService.findById(customerId)
         val customerToUpdate = customerUpdateDto.toEntity(customer)

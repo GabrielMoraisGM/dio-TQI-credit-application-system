@@ -1,5 +1,6 @@
 package edu.dio.bootcampTQI.credit.application.system.service.impl
 
+import edu.dio.bootcampTQI.credit.application.system.exception.BusinessException
 import edu.dio.bootcampTQI.credit.application.system.model.Credit
 import edu.dio.bootcampTQI.credit.application.system.repository.CreditRepository
 import edu.dio.bootcampTQI.credit.application.system.service.ICreditService
@@ -18,12 +19,16 @@ class CreditService(
         return this.creditRepository.save(credit)
     }
 
-    override fun findAllByCustomerId(customerId: Long): List<Credit> = this.creditRepository.findAllByCustomerId(customerId)
+    override fun findAllByCustomerId(customerId: Long): List<Credit>{
+        val credit: List<Credit> = this.creditRepository.findAllByCustomerId(customerId)
+        if (credit.isEmpty()) return credit
+        else throw BusinessException("[LOG] no credits found with this customer ID:$customerId!")
+    }
 
     override fun findByCreditCode(custumerId: Long ,creditCode: UUID): Credit {
         val credit: Credit = (this.creditRepository.findByCreditCode(creditCode)
-            ?: throw RuntimeException("[LOG] CreditCode $creditCode not found"))
-        return if (credit.customer?.idCustomer == custumerId ) credit else throw RuntimeException("[ALERT]Contact admin")
+            ?: throw BusinessException("[LOG] CreditCode $creditCode not found"))
+        return if (credit.customer?.idCustomer == custumerId ) credit else throw IllegalArgumentException("[ALERT]Contact admin")
     }
 
 
