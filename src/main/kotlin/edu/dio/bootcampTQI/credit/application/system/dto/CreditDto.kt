@@ -15,7 +15,7 @@ data class CreditDto(
     @field:NotNull(message = "Cannot be empty")
     val numberOfInstallment: Int,
     @field:NotNull(message = "Cannot be empty")
-    val customerId: Long
+    val customerId: Long,
 ){
 
     fun toEntity(): Credit = Credit(
@@ -24,4 +24,5 @@ data class CreditDto(
         numberOfInstallments = this.numberOfInstallment,
         customer = Customer(idCustomer = this.customerId)
     )
+
 }

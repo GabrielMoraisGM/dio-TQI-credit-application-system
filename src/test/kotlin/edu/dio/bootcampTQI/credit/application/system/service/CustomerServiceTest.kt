@@ -1,6 +1,6 @@
 package edu.dio.bootcampTQI.credit.application.system.service
 
-import edu.dio.bootcampTQI.credit.application.system.exception.BusinessException
+import edu.dio.bootcampTQI.credit.application.system.exception.NotFoundException
 import edu.dio.bootcampTQI.credit.application.system.model.Address
 import edu.dio.bootcampTQI.credit.application.system.model.Customer
 import edu.dio.bootcampTQI.credit.application.system.repository.CustomerRepository
@@ -67,9 +67,9 @@ class CustomerServiceTest {
         //when
         //then
 
-        Assertions.assertThatExceptionOfType(BusinessException::class.java)
+        Assertions.assertThatExceptionOfType(NotFoundException::class.java)
             .isThrownBy { customerService.findById(fakeId) }
-            .withMessage("[LOG] ID: $fakeId not found!")
+            .withMessage("ID: $fakeId not found!")
         verify(exactly = 1) { customerRepository.findById(fakeId) }
     }
 

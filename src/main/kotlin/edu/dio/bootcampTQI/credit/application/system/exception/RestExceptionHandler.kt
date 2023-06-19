@@ -3,6 +3,7 @@ package edu.dio.bootcampTQI.credit.application.system.exception
 import org.springframework.dao.DataAccessException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import org.springframework.validation.FieldError
 import org.springframework.validation.ObjectError
 import org.springframework.web.bind.MethodArgumentNotValidException
@@ -24,12 +25,12 @@ class RestExceptionHandler {
         }
         return ResponseEntity(
             ExceptionDetails(
-                title = "Bad Request! Consult documentation",
+                title = "Unprocessable entity",
                 timestamp = LocalDateTime.now(),
-                status = HttpStatus.BAD_REQUEST.value(),
+                status = HttpStatus.UNPROCESSABLE_ENTITY.value(),
                 exception = ex.javaClass.toString(),
                 details = erros.toString()
-            ), HttpStatus.BAD_REQUEST
+            ), HttpStatus.UNPROCESSABLE_ENTITY
         )
     }
 
@@ -47,8 +48,22 @@ class RestExceptionHandler {
         )
     }
 
-    @ExceptionHandler(BusinessException::class)
-    fun handlerValidException(ex: BusinessException): ResponseEntity<ExceptionDetails>{
+    @ExceptionHandler(InternalErrorException::class)
+    fun handlerValidException(ex: InternalErrorException): ResponseEntity<ExceptionDetails>{
+
+        return ResponseEntity(
+            ExceptionDetails(
+                title = "Internal error",
+                timestamp = LocalDateTime.now(),
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                exception = ex.javaClass.toString(),
+                details = "${ex.message}"
+            ), HttpStatus.INTERNAL_SERVER_ERROR
+        )
+    }
+
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handlerValidException(ex: java.lang.IllegalArgumentException): ResponseEntity<ExceptionDetails>{
 
         return ResponseEntity(
             ExceptionDetails(
@@ -61,12 +76,38 @@ class RestExceptionHandler {
         )
     }
 
-    @ExceptionHandler(IllegalArgumentException::class)
-    fun handlerValidException(ex: java.lang.IllegalArgumentException): ResponseEntity<ExceptionDetails>{
+    @ExceptionHandler(NotFoundException::class)
+    fun handlerValidException(ex: Exception): ResponseEntity<ExceptionDetails>{
 
         return ResponseEntity(
             ExceptionDetails(
-                title = "Bad Request! Consult documentation",
+                title = "Client not found",
+                timestamp = LocalDateTime.now(),
+                status = HttpStatus.NOT_FOUND.value(),
+                exception = ex.javaClass.toString(),
+                details = "${ex.message}"
+            ), HttpStatus.BAD_REQUEST
+        )
+    }
+
+    @ExceptionHandler(JpaObjectRetrievalFailureException::class)
+    fun handlerValidException(ex: JpaObjectRetrievalFailureException): ResponseEntity<ExceptionDetails>{
+        return ResponseEntity(
+            ExceptionDetails(
+                title = "Failed to locate entity",
+                timestamp = LocalDateTime.now(),
+                status = HttpStatus.BAD_REQUEST.value(),
+                exception = ex.javaClass.toString(),
+                details = "${ex.message}"
+            ), HttpStatus.BAD_REQUEST
+        )
+    }
+
+    @ExceptionHandler(NoSuchElementException::class)
+    fun handlerValidException(ex: NoSuchElementException): ResponseEntity<ExceptionDetails>{
+        return ResponseEntity(
+            ExceptionDetails(
+                title = "Failed to locate customer",
                 timestamp = LocalDateTime.now(),
                 status = HttpStatus.BAD_REQUEST.value(),
                 exception = ex.javaClass.toString(),

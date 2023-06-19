@@ -27,6 +27,7 @@ data class CustomerDto(
     val zipCode: String,
     @field: NotEmpty(message = "Cannot be empty")
     val street: String
+
 ){
 
     fun toEntity(): Customer = Customer(

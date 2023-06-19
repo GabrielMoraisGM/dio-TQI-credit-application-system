@@ -44,8 +44,8 @@ class CreditRespositoryTest {
         credit2.creditCode = creditCode2
 
         //when
-        val fakeCredit1: Credit = creditRepository.findByCreditCode(creditCode1)!!
-        val fakeCredit2: Credit = creditRepository.findByCreditCode(creditCode2)!!
+        val fakeCredit1: Credit = creditRepository.findByCreditCode(customer.idCustomer!!,creditCode1)!!
+        val fakeCredit2: Credit = creditRepository.findByCreditCode(customer.idCustomer!!,creditCode2)!!
 
         // then
         Assertions.assertThat(fakeCredit1).isNotNull

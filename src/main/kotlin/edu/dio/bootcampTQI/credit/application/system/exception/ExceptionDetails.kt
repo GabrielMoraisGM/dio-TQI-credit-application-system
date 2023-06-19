@@ -9,4 +9,5 @@ class ExceptionDetails(
     val exception: String,
     val details: String
     ){
+
 }
