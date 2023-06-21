@@ -5,6 +5,8 @@ import edu.dio.bootcampTQI.credit.application.system.dto.CreditView
 import edu.dio.bootcampTQI.credit.application.system.dto.CreditViewList
 import edu.dio.bootcampTQI.credit.application.system.model.Credit
 import edu.dio.bootcampTQI.credit.application.system.service.impl.CreditService
+import edu.dio.bootcampTQI.credit.application.system.service.impl.CustomerService
+import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -14,12 +16,13 @@ import java.util.stream.Collectors
 @RestController
 @RequestMapping("/api/credit")
 class CreditResource(
-    private val creditService: CreditService
+    private val creditService: CreditService,
+    private val customerService: CustomerService
 ){
     @PostMapping
-    fun saveCredit(@RequestBody creditDto: CreditDto): ResponseEntity<String>{
-        val credit: Credit = this.creditService.save(creditDto.toEntity())
-        return ResponseEntity.status(HttpStatus.CREATED).body("[LOG] Credit ${credit.creditCode} - Customer ${credit.customer?.firstName} saved!")
+    fun saveCredit(@Valid @RequestBody creditDto: CreditDto): ResponseEntity<CreditView> {
+        val creditSaved: Credit = this.creditService.save(creditDto.toEntity())
+        return ResponseEntity.status(HttpStatus.CREATED).body(CreditView(creditSaved))
     }
 
     @GetMapping
